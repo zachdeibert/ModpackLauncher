@@ -1,0 +1,25 @@
+apply plugin: "java"
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://libraries.minecraft.net/"
+	}
+}
+
+dependencies {
+	compile localGroovy()
+	compile "com.mojang:authlib:1.5.21"
+	compile "com.google.code.gson:gson:2.2.4"
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+	main = "com.gitlab.zachdeibert.modpacklauncher.Main"
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+jar {
+	manifest {
+		attributes "Main-Class": "com.gitlab.zachdeibert.modpacklauncher.Main"
+	}
+}
