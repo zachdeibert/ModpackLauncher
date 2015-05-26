@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent;
 
 public class ModInstaller implements InstallationComponent {
@@ -31,13 +32,13 @@ public class ModInstaller implements InstallationComponent {
         }
     }
     
-    public ModInstaller(final ConstructorArguments args, final List<String> mods, final String dir) {
+    public ModInstaller(final ConstructorArguments args, final List<String> mods, final Directory dir) {
         this.args = args;
         this.mods = mods;
-        this.dir = new File(args.system.installDir, dir);
+        this.dir = dir.getFile(args);
     }
     
     public ModInstaller(final ConstructorArguments args) {
-        this(args, args.install.loaderMods, "mods");
+        this(args, args.install.loaderMods, Directory.MODS_DIR);
     }
 }

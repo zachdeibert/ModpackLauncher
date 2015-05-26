@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent;
 
 public class ConfigInstaller implements InstallationComponent {
@@ -34,7 +35,7 @@ public class ConfigInstaller implements InstallationComponent {
     public void install() throws Exception {
         args.progress.setSteps(args.install.configs.size());
         if ( !args.install.configs.isEmpty() ) {
-            final File dir = new File(args.system.installDir, "config");
+            final File dir = Directory.CONFIG_DIR.getFile(args);
             for ( final String url : args.install.configs ) {
                 installConfig(dir, url);
                 args.progress.stepForward();

@@ -6,15 +6,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.Hash;
 import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent;
-import com.gitlab.zachdeibert.modpacklauncher.install.Installer.Index;
-import com.gitlab.zachdeibert.modpacklauncher.install.Installer.Resource;
-import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class AssetInstaller implements InstallationComponent {
+    public static class Index {
+        public Map<String, Resource> objects;
+    }
+    public static class Resource {
+        public String hash;
+        public int    size;
+    }
     private final ConstructorArguments args;
     
     protected boolean useOldAssetFormat() {
@@ -37,8 +44,8 @@ public class AssetInstaller implements InstallationComponent {
     }
     
     protected void installAssets(final File dir) throws IOException, NoSuchAlgorithmException {
-        final File indexesDir = new File(dir, "indexes");
-        final File objectDir = new File(dir, "objects");
+        final File indexesDir = Directory.INDEX_DIR.getFile(dir);
+        final File objectDir = Directory.OBJECT_DIR.getFile(dir);
         final File indexFile = new File(indexesDir, args.system.version.concat(".json"));
         installAssetIndex(indexFile, String.format("https://s3.amazonaws.com/Minecraft.Download/indexes/%s.json", args.system.version));
         final Gson gson = new GsonBuilder().create();
@@ -55,7 +62,7 @@ public class AssetInstaller implements InstallationComponent {
     @Override
     public void install() throws Exception {
         args.progress.setSteps(1);
-        installAssets(new File(args.system.installDir, "assets"));
+        installAssets(Directory.ASSET_DIR.getFile(args));
         args.progress.stepForward();
     }
     

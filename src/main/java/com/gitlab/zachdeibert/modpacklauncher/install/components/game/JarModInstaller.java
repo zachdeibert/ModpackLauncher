@@ -11,6 +11,7 @@ import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent;
 
 public class JarModInstaller implements InstallationComponent {
@@ -38,7 +39,7 @@ public class JarModInstaller implements InstallationComponent {
     public void install() throws Exception {
         args.progress.setSteps(args.install.jarMods.size());
         if ( !args.install.jarMods.isEmpty() ) {
-            final File jar = getMCJar(args.system);
+            final File jar = Directory.MC_JAR.getFile(args);
             jar.getParentFile().mkdirs();
             final FileOutputStream jarOut = new FileOutputStream(jar);
             final JarOutputStream jarFile = new JarOutputStream(jarOut);

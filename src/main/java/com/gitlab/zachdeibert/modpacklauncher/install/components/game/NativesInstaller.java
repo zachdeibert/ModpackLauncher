@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent;
 import com.gitlab.zachdeibert.modpacklauncher.install.Maven;
 
@@ -52,8 +53,8 @@ public class NativesInstaller implements InstallationComponent {
     public void install() throws Exception {
         args.progress.setSteps(args.install.libs.size());
         if ( !args.install.libs.isEmpty() ) {
-            final File dir = new File(args.system.installDir, "libraries");
-            final File nativeDir = new File(args.system.installDir, "natives");
+            final File dir = Directory.LIBRARY_DIR.getFile(args);
+            final File nativeDir = Directory.NATIVES_DIR.getFile(args);
             dir.mkdirs();
             final Maven mvn = new Maven();
             mvn.addRepos(args.install.libRepos);

@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import com.gitlab.zachdeibert.modpacklauncher.gui.Window;
+import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.LauncherInstallationComponent;
 import com.gitlab.zachdeibert.modpacklauncher.install.components.launcher.DepsInstaller;
 import com.gitlab.zachdeibert.modpacklauncher.install.components.launcher.GroovyInstaller;
@@ -45,7 +46,7 @@ final class Main extends Thread {
         if ( !deps.isInstalled() ) {
             deps.install();
         }
-        m.rtc = new File(m.system.installDir, "runtime.ser");
+        m.rtc = Directory.RUNTIME_SER.getFile(m.system);
         m.runtime.copy(RuntimeConfiguration.load(m.rtc));
         m.win.setName(m.system.name);
         System.out.println("Loaded configuration:");
