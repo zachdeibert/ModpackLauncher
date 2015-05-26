@@ -16,7 +16,7 @@ public class Authenticator {
     
     private static char randHex(final Random rand) {
         int val = rand.nextInt(16);
-        return (char) (val < 10 ? '0' + val : 'A' + val - 10);
+        return (char) (val < 10 ? '0' + val : 'a' + val - 10);
     }
     
     private static void randHexStr(final Random rand, final StringBuilder str, final int size) {
