@@ -1,5 +1,6 @@
 package com.gitlab.zachdeibert.modpacklauncher.install;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,19 +24,16 @@ public class Maven {
         addRepos(Arrays.asList(repos));
     }
     
-    public InputStream download(final String artifact) throws IOException {
+    public InputStream download(final String artifact) throws FileNotFoundException {
         final String parts[] = artifact.split(":");
         final String fileName = String.format("%s/%s/%s/%2$s-%3$s%s.jar", parts[0].replace('.', '/'), parts[1], parts[2], parts.length < 4 ? "" : "-".concat(parts[3]));
-        IOException ex = null;
         for ( final String repo : repos ) {
             final String url = String.format("%s%s%s", repo, repo.endsWith("/") ? "" : "/", fileName);
             try {
                 return StreamUtils.download(url);
-            } catch ( final IOException e ) {
-                ex = e;
-            }
+            } catch ( final IOException e ) {}
         }
-        throw ex;
+        throw new FileNotFoundException(artifact);
     }
     
     public Maven() {
