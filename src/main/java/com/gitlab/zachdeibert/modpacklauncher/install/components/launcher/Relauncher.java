@@ -7,6 +7,9 @@ abstract class Relauncher {
         Thread.sleep(1000);
         final File from = new File(args[0]);
         final File to = new File(args[1]);
+        if ( to.exists() ) {
+            to.delete();
+        }
         from.renameTo(to);
         final String cmd[] = new String[] {
             "java",
