@@ -27,7 +27,12 @@ final class Main extends Thread {
         }
     }
     
-    public static void main(final String[] args) throws Throwable {
+    public static void main(final String args[]) throws Throwable {
+        final File relauncher = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile().concat("~~"));
+        if ( relauncher.exists() ) {
+            Thread.sleep(1000);
+            relauncher.delete();
+        }
         final Main m = new Main();
         try {
             EventQueue.invokeAndWait(() -> {

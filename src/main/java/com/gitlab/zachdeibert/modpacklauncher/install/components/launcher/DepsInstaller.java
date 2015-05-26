@@ -6,8 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 import com.gitlab.zachdeibert.modpacklauncher.InstallConfiguration;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
 import com.gitlab.zachdeibert.modpacklauncher.gui.Window;
@@ -77,27 +81,36 @@ public class DepsInstaller implements LauncherInstallationComponent {
         for ( final Streams stream : streams ) {
             stream.close();
         }
-        backup.renameTo(self);
     }
     
     protected void restart() throws IOException {
         win.setVisible(false);
+        final File thisJar = getSelf();
+        final String self = thisJar.getAbsolutePath();
+        final File relauncher = new File(self.concat("~~"));
+        final InputStream is = ClassLoader.getSystemResourceAsStream("com/gitlab/zachdeibert/modpacklauncher/install/components/launcher/Relauncher.class");
+        final FileOutputStream os = new FileOutputStream(relauncher);
+        final JarOutputStream jos = new JarOutputStream(os);
+        final Manifest man = new Manifest();
+        final Attributes attr = man.getMainAttributes();
+        attr.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+        attr.put(Attributes.Name.MAIN_CLASS, "com.gitlab.zachdeibert.modpacklauncher.install.components.launcher.Relauncher");
+        final JarEntry manifest = new JarEntry(JarFile.MANIFEST_NAME);
+        jos.putNextEntry(manifest);
+        man.write(jos);
+        final JarEntry main = new JarEntry("com/gitlab/zachdeibert/modpacklauncher/install/components/launcher/Relauncher.class");
+        jos.putNextEntry(main);
+        StreamUtils.copyAndClose(is, jos);
+        os.close();
         final String cmd[] = new String[] {
             "java",
             "-jar",
-            getSelf().getAbsolutePath()
+            self.concat("~~"),
+            self.concat("~"),
+            self
         };
-        final Runtime rt = Runtime.getRuntime();
-        final Process proc = rt.exec(cmd);
-        new StreamUtils.OutputRedirThread(proc.getInputStream(), System.out).start();
-        new StreamUtils.OutputRedirThread(proc.getErrorStream(), System.err).start();
-        try {
-            System.exit(proc.waitFor());
-        } catch ( final RuntimeException ex ) {
-            throw ex;
-        } catch ( final Exception ex ) {
-            throw new RuntimeException(ex);
-        }
+        Runtime.getRuntime().exec(cmd);
+        System.exit(0);
     }
     
     @Override
