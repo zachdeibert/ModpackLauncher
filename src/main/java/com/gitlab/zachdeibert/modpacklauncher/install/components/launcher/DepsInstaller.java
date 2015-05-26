@@ -10,6 +10,7 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import com.gitlab.zachdeibert.modpacklauncher.InstallConfiguration;
 import com.gitlab.zachdeibert.modpacklauncher.StreamUtils;
+import com.gitlab.zachdeibert.modpacklauncher.gui.Window;
 import com.gitlab.zachdeibert.modpacklauncher.install.LauncherInstallationComponent;
 import com.gitlab.zachdeibert.modpacklauncher.install.Maven;
 
@@ -30,12 +31,14 @@ public class DepsInstaller implements LauncherInstallationComponent {
         "com.google.guava:guava:17.0",
         "com.mojang:authlib:1.5.21",
         "commons-codec:commons-codec:1.9",
+        "commons-io:commons-io:2.4",
         "org.apache.commons:commons-lang3:3.3.2",
         "org.apache.logging.log4j:log4j-api:2.0-beta9",
         "org.apache.logging.log4j:log4j-core:2.0-beta9"
                                               };
     private final Maven                mvn;
     private final InstallConfiguration config;
+    private final Window               win;
     
     protected void addRepos(final String... repos) {
         mvn.addRepos(repos);
@@ -78,6 +81,7 @@ public class DepsInstaller implements LauncherInstallationComponent {
     }
     
     protected void restart() throws IOException {
+        win.setVisible(false);
         final String cmd[] = new String[] {
             "java",
             "-jar",
@@ -113,16 +117,17 @@ public class DepsInstaller implements LauncherInstallationComponent {
         restart();
     }
     
-    private DepsInstaller(final InstallConfiguration config, final byte b) {
+    private DepsInstaller(final InstallConfiguration config, final Window win, final byte b) {
         mvn = new Maven();
         this.config = config;
+        this.win = win;
     }
     
-    protected DepsInstaller() {
-        this(null);
+    protected DepsInstaller(final Window win) {
+        this(null, win);
     }
     
-    public DepsInstaller(final InstallConfiguration config) {
-        this(config, (byte) 0);
+    public DepsInstaller(final InstallConfiguration config, final Window win) {
+        this(config, win, (byte) 0);
     }
 }

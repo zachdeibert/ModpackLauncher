@@ -5,6 +5,9 @@ public interface ProgressHandler {
         private int steps;
         
         @Override
+        public void stepForward(int steps) {}
+        
+        @Override
         public void stepForward() {}
 
         @Override
@@ -24,7 +27,11 @@ public interface ProgressHandler {
         }
     };
     
-    void stepForward();
+    void stepForward(int steps);
+    
+    default void stepForward() {
+        stepForward(1);
+    }
     
     default void finishEarly() {
         for ( int i = getSteps(); i > 0; i-- ) {

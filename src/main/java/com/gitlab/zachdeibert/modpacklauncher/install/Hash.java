@@ -20,10 +20,10 @@ public class Hash {
         final byte hash[] = sha1.digest();
         final StringBuilder str = new StringBuilder();
         for ( final byte b : hash ) {
-            str.append(String.format("%02d", b));
+            str.append(String.format("%02x", b));
         }
         full = str.toString();
-        small = String.format("%02d", hash[0]);
+        small = String.format("%02x", hash[0]);
     }
     
     public Hash(final String data, final String encoding) throws UnsupportedEncodingException, NoSuchAlgorithmException {

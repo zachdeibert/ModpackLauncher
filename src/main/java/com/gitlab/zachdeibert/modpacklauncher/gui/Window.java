@@ -14,7 +14,9 @@ import com.gitlab.zachdeibert.modpacklauncher.InstallConfiguration;
 import com.gitlab.zachdeibert.modpacklauncher.Launcher;
 import com.gitlab.zachdeibert.modpacklauncher.RuntimeConfiguration;
 import com.gitlab.zachdeibert.modpacklauncher.SystemConfiguration;
+import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent.ConstructorArguments;
 import com.gitlab.zachdeibert.modpacklauncher.install.Installer;
+import com.gitlab.zachdeibert.modpacklauncher.install.ProgressHandler;
 
 public class Window extends JFrame {
     private static final long          serialVersionUID = -7683156597811406535L;
@@ -75,8 +77,12 @@ public class Window extends JFrame {
     
     public Window(final SystemConfiguration system, final InstallConfiguration install, final RuntimeConfiguration runtime) {
         this.runtime = runtime;
-        final Installer instlr = new Installer(system, install);
-        final Authenticator auth = new Authenticator(runtime);
+        final ConstructorArguments args = new ConstructorArguments();
+        args.system = system;
+        args.install = install;
+        args.runtime = runtime;
+        args.progress = ProgressHandler.NULL;
+        final Installer instlr = new Installer(args);
         final Launcher launcher = new Launcher(system, runtime);
         // Initialization
         contentPanel = new JPanel();
@@ -99,7 +105,7 @@ public class Window extends JFrame {
             
             @Override
             public void setValue(final int n) {
-                if ( n == getMaximum() ) {
+                if ( n > getMaximum() ) {
                     onLoadingFinished();
                 }
                 super.setValue(n);
@@ -160,11 +166,11 @@ public class Window extends JFrame {
         }
         {
             loginButton.setText("Login");
-            loginButton.addActionListener((ActionEvent) -> auth.login(username.getText(), password.getText()));
+            loginButton.addActionListener((ActionEvent) -> new Authenticator(runtime).login(username.getText(), password.getText()));
         }
         {
             logoutButton.setText("Logout");
-            logoutButton.addActionListener((ActionEvent) -> auth.logout());
+            logoutButton.addActionListener((ActionEvent) -> new Authenticator(runtime).logout());
         }
         {
             installButton.setText("Install");

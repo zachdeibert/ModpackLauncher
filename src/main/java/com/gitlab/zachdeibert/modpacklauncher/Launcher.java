@@ -7,6 +7,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import com.gitlab.zachdeibert.modpacklauncher.install.Directory;
 import com.gitlab.zachdeibert.modpacklauncher.install.Installer;
+import com.gitlab.zachdeibert.modpacklauncher.install.ProgressHandler;
+import com.gitlab.zachdeibert.modpacklauncher.install.InstallationComponent.ConstructorArguments;
 
 public class Launcher {
     private final SystemConfiguration  system;
@@ -28,7 +30,12 @@ public class Launcher {
     }
     
     public void launch(final Component comp) {
-        final Installer instlr = new Installer(system, null);
+        final ConstructorArguments args = new ConstructorArguments();
+        args.system = system;
+        args.install = null;
+        args.runtime = runtime;
+        args.progress = ProgressHandler.NULL;
+        final Installer instlr = new Installer(args);
         if ( !instlr.isInstalled() ) {
             JOptionPane.showMessageDialog(null, "The modpack is not installed.", "Launching Modpack", JOptionPane.ERROR_MESSAGE);
             return;

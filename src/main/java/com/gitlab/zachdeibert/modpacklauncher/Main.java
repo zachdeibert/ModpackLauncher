@@ -27,10 +27,6 @@ final class Main extends Thread {
     }
     
     public static void main(final String[] args) throws Throwable {
-        final LauncherInstallationComponent groovy = new GroovyInstaller();
-        if ( !groovy.isInstalled() ) {
-            groovy.install();
-        }
         final Main m = new Main();
         try {
             EventQueue.invokeAndWait(() -> {
@@ -40,9 +36,13 @@ final class Main extends Thread {
         } catch ( final Exception ex ) {
             ex.printStackTrace();
         }
+        final LauncherInstallationComponent groovy = new GroovyInstaller(m.win);
+        if ( !groovy.isInstalled() ) {
+            groovy.install();
+        }
         final ScriptLoader loader = new ScriptLoader(m.system, m.install);
         loader.run();
-        final LauncherInstallationComponent deps = new DepsInstaller(m.install);
+        final LauncherInstallationComponent deps = new DepsInstaller(m.install, m.win);
         if ( !deps.isInstalled() ) {
             deps.install();
         }

@@ -1,6 +1,7 @@
 package com.gitlab.zachdeibert.modpacklauncher.install.components.launcher;
 
 import java.io.IOException;
+import com.gitlab.zachdeibert.modpacklauncher.gui.Window;
 
 public class GroovyInstaller extends DepsInstaller {
     @Override
@@ -18,5 +19,9 @@ public class GroovyInstaller extends DepsInstaller {
         addRepos("http://repo1.maven.org/maven2/");
         getArtifacts("org.codehaus.groovy:groovy-all:2.3.9");
         restart();
+    }
+    
+    public GroovyInstaller(final Window win) {
+        super(win);
     }
 }
