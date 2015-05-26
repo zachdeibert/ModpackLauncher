@@ -49,7 +49,7 @@ public class Launcher {
         final List<String> cmd = new LinkedList<String>();
         cmd.add("java");
         cmd.add("-cp");
-        cmd.add(String.join(":", jars));
+        cmd.add(String.join(System.getProperty("os.name").toLowerCase().indexOf("win") >= 0 ? ";" : ":", jars));
         cmd.add("-Djava.library.path=".concat(Directory.NATIVES_DIR.getFile(system).getAbsolutePath()));
         cmd.add("-Dfml.ignoreInvalidMinecraftCertificates=true");
         cmd.add("-Xmx".concat(runtime.memMax));
