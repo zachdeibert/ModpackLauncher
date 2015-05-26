@@ -90,7 +90,7 @@ public abstract class StreamUtils {
         }
     }
     
-    public static void mergeJars(final ZipOutputStream out, final Predicate<ZipEntry> filter, final ZipInputStream... ins) throws IOException {
+    public static void mergeJars(final ZipOutputStream out, final Predicate<? super ZipEntry> filter, final ZipInputStream... ins) throws IOException {
         final List<String> files = new LinkedList<String>();
         ZipEntry entry;
         for ( final ZipInputStream in : ins ) {
