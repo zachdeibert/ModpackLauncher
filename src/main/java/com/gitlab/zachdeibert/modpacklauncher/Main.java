@@ -20,6 +20,7 @@ final class Main extends Thread {
     @Override
     public void run() {
         try {
+            rtc.getParentFile().mkdirs();
             RuntimeConfiguration.save(rtc, runtime);
         } catch ( final IOException ex ) {
             ex.printStackTrace();
