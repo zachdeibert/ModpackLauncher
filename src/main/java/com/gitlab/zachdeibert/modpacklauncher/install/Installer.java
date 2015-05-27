@@ -12,7 +12,7 @@ import com.gitlab.zachdeibert.modpacklauncher.install.components.game.ConfigInst
 import com.gitlab.zachdeibert.modpacklauncher.install.components.game.CoreModInstaller;
 import com.gitlab.zachdeibert.modpacklauncher.install.components.game.JarModInstaller;
 import com.gitlab.zachdeibert.modpacklauncher.install.components.game.ModInstaller;
-import com.gitlab.zachdeibert.modpacklauncher.install.components.game.NativesInstaller;
+import com.gitlab.zachdeibert.modpacklauncher.install.components.game.LibraryInstaller;
 
 public class Installer {
     private static class ThrowableArray extends Throwable {
@@ -115,7 +115,7 @@ public class Installer {
             try {
                 final InstallationComponent components[] = new InstallationComponent[] {
                     new JarModInstaller(getArgs(bar)),
-                    new NativesInstaller(getArgs(bar)),
+                    new LibraryInstaller(getArgs(bar)),
                     new AssetInstaller(getArgs(bar)),
                     new CoreModInstaller(getArgs(bar)),
                     new ModInstaller(getArgs(bar)),
